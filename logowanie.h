@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class Logowanie; }
 QT_END_NAMESPACE
@@ -22,9 +24,7 @@ public:
 
 private:
     Ui::Logowanie *ui;
-
-
-signals:
+    class QTcpSocket *socket;
 
 };
 #endif // LOGOWANIE_H

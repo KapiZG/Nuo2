@@ -3,7 +3,10 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <windows.h>
+#include <QTcpSocket>
 #include "wyborgry.h"
+#include <QMessageBox>
+
 //#include <QtSql>
 
 Logowanie::Logowanie(QWidget *parent)
@@ -13,7 +16,24 @@ Logowanie::Logowanie(QWidget *parent)
     ui->setupUi(this);
     ui->W_Rejestracja->hide();
     ui->Blad->hide();
+    qDebug()<<"TAKKKK";
+    socket = new QTcpSocket(this);
 
+    socket->connectToHost("127.0.0.1", 6969);
+
+    if(socket->waitForConnected(10)){
+
+        socket->write("Odpowiedz od socketa");
+        socket->flush();
+        socket->waitForBytesWritten(100);
+
+        socket->waitForReadyRead(300);
+        qDebug()<<"Test:" <<socket->readAll();
+
+        socket->close();
+    } else {
+        QMessageBox::critical(this, "Error", "Nie można połączyć z serverem");
+    }
     connect(ui->zarejestruj, &QPushButton::pressed, this, &Logowanie::zakladkaRejestracji);
     connect(ui->zaloguj, &QPushButton::pressed, this, &Logowanie::zakladkaLogowania);
 }

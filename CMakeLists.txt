@@ -11,8 +11,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools Network)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools Network)
 
 set(TS_FILES Nuo2_pl_PL.ts)
 
@@ -41,7 +41,6 @@ set(PROJECT_SOURCES
         ${TS_FILES}
 )
 
-find_package(Qt6 REQUIRED COMPONENTS Sql)
 
 
 
@@ -89,3 +88,7 @@ install(TARGETS Nuo2
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(Nuo2)
 endif()
+
+
+target_link_libraries(Nuo2
+    PRIVATE Qt${QT_VERSION_MAJOR}::Network)
