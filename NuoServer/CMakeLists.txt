@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+find_package(sqlite3 PATHS C:/Users/User/Desktop/QTPliki/NuoProject/NuoServer/lib)
 #include_directories(/usr/include)
 #link_directories(/usr/lib)
 #target_link_libraries(tutorial sqlite3)

@@ -25,8 +25,25 @@ void NuoServer::newConnection()
     socket->waitForReadyRead(200);
     qDebug()<<"Test: "<<socket->readAll();
 
-    socket->write("Odpowiedz z servera");
+    socket->write("Połączono z Bazą");
     socket->waitForBytesWritten(200);
 
-    socket->close();
+    connect(socket, &QIODevice::readyRead, this, [socket]()
+    {
+        char *wiadomosc = socket->readAll().data();
+
+        qDebug()<<wiadomosc;
+
+
+    });
+    connect(socket, &QAbstractSocket::disconnected, this, [socket]()
+    {
+        qDebug()<<"Rozłączono";
+        socket->close();
+    });
+}
+
+void NuoServer::odczytajWiadomosc()
+{
+
 }

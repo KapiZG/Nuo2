@@ -132,7 +132,7 @@ hr { height: 1px; border-width: 0; }
      <rect>
       <x>0</x>
       <y>40</y>
-      <width>141</width>
+      <width>161</width>
       <height>241</height>
      </rect>
     </property>
@@ -149,27 +149,66 @@ hr { height: 1px; border-width: 0; }
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QTextEdit" name="TextDoWyslania">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>104</width>
-       <height>70</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QPushButton" name="TextDoServeraTest">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>170</y>
+       <x>30</x>
+       <y>120</y>
        <width>80</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
       <string>PushButton</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="TextDoWyslaniaTest">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>90</y>
+       <width>161</width>
+       <height>24</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>290</y>
+      <width>151</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <widget class="QLineEdit" name="CzyJestPolaczenie">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>10</y>
+       <width>151</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="PolaczZServerem">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>101</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Połącz z Serverem</string>
      </property>
     </widget>
    </widget>

@@ -19,27 +19,19 @@ Logowanie::Logowanie(QWidget *parent)
     qDebug()<<"TAKKKK";
     socket = new QTcpSocket(this);
 
-    socket->connectToHost("127.0.0.1", 6969);
+    polaczZServerem();
 
-    if(socket->waitForConnected(10)){
+    connect(ui->PolaczZServerem, &QPushButton::pressed, this, &Logowanie::polaczZServerem);
 
-        socket->write("Odpowiedz od socketa");
-        socket->flush();
-        socket->waitForBytesWritten(100);
+    connect(ui->TextDoServeraTest, &QPushButton::pressed, this, &Logowanie::wyslijWiadomosc);
 
-        socket->waitForReadyRead(300);
-        qDebug()<<"Test:" <<socket->readAll();
-
-        socket->close();
-    } else {
-        QMessageBox::critical(this, "Error", "Nie można połączyć z serverem");
-    }
     connect(ui->zarejestruj, &QPushButton::pressed, this, &Logowanie::zakladkaRejestracji);
     connect(ui->zaloguj, &QPushButton::pressed, this, &Logowanie::zakladkaLogowania);
 }
 
 Logowanie::~Logowanie()
 {
+    socket->close();
     delete ui;
 }
 
@@ -134,4 +126,30 @@ void Logowanie::logowanie()
             this->close();
         });
     }
+}
+
+void Logowanie::polaczZServerem()
+{
+    socket->close();
+    socket->connectToHost("127.0.0.1", 6969);
+
+    if(socket->waitForConnected(10)){
+
+        socket->write("Odpowiedz od socketa");
+        socket->flush();
+        socket->waitForBytesWritten(100);
+
+        socket->waitForReadyRead(300);
+        ui->CzyJestPolaczenie->setText(socket->readAll());
+
+    } else {
+        QMessageBox::critical(this, "Error", "Nie można połączyć z serverem");
+        ui->CzyJestPolaczenie->setText("Brak złączenia z serverem");
+    }
+}
+
+
+void Logowanie::wyslijWiadomosc()
+{
+    socket->write(ui->TextDoWyslaniaTest->text().toStdString().c_str());
 }

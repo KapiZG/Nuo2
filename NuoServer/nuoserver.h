@@ -12,6 +12,7 @@ public:
 
 public slots:
     void newConnection();
+    void odczytajWiadomosc();
 
 private:
     class QTcpServer *mojaServer;

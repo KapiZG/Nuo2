@@ -21,6 +21,8 @@ public:
     void zakladkaRejestracji();
     void logowanie();
     void zakladkaLogowania();
+    void polaczZServerem();
+    void wyslijWiadomosc();
 
 private:
     Ui::Logowanie *ui;
