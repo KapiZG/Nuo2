@@ -1,20 +1,35 @@
 #include "nuoserver.h"
 #include <QTextStream>
 #include <QTcpSocket>
-
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QSqlDatabase>
+#include <QtSql>
 
 NuoServer::NuoServer(QObject *parent)
     : QTcpServer(parent)
 {
+    //Utworzenie servera
     mojaServer = new QTcpServer(this);
-
     connect(mojaServer, &QTcpServer::newConnection, this, &NuoServer::newConnection);
 
-    if(!mojaServer->listen(QHostAddress::Any, 6969)){
-        qDebug()<<"Error";
-    } else {
+    //Połączenie z bazą danych
+    bazaDanych.setHostName("127.0.0.130");
+    bazaDanych.setUserName("root");
+    bazaDanych.setPassword("");
+    bazaDanych.setDatabaseName("db_nuo");
+
+    //Sprawdzenie czy wszystko działa
+    if(mojaServer->listen(QHostAddress::Any, 6969) && bazaDanych.open()){
         qDebug()<<"Działa byczku";
+    } else {
+        qDebug() << "ERROR";
     }
+
+
+
 }
 
 //Test Połączenia
@@ -30,12 +45,34 @@ void NuoServer::newConnection()
 
     connect(socket, &QIODevice::readyRead, this, [socket]()
     {
-        char *wiadomosc = socket->readAll().data();
+        QByteArray *wiadomosc = new QByteArray(socket->readAll());
+        QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(*wiadomosc));
 
-        qDebug()<<wiadomosc;
+        if(!json->isEmpty())
+        {
+            QJsonObject *jsonObject = new QJsonObject(json->object());
 
+            qDebug() << *jsonObject;
+            if(jsonObject->value("Typ").toString() == "R")
+            {
+                QString *nazwa = new QString(jsonObject->value("Nazwa").toString());
+                QString *haslo = new QString(jsonObject->value("Haslo").toString());
 
+                QSqlQuery *insertUser = new QSqlQuery("Insert into users value (null, \"" + *nazwa + "\", \"" + *haslo + "\");");
+                if(insertUser->exec())
+                {
+                    socket->write("t");
+                }
+                else
+                {
+                    socket->write("f");
+                }
+            }
+        }
     });
+
+
+//    Rozłączenie z serverem
     connect(socket, &QAbstractSocket::disconnected, this, [socket]()
     {
         qDebug()<<"Rozłączono";

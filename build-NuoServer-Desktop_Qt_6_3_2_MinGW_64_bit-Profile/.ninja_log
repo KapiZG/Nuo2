@@ -1,0 +1,10 @@
+# ninja log v5
+1	1082	6885888860481753	NuoServer_autogen/timestamp	f78e9ecbb59c1ad4
+1	1082	6885888860481753	NuoServer_autogen/mocs_compilation.cpp	f78e9ecbb59c1ad4
+1	1082	6885888860481753	C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/NuoServer_autogen/timestamp	f78e9ecbb59c1ad4
+1	1082	6885888860481753	C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/NuoServer_autogen/mocs_compilation.cpp	f78e9ecbb59c1ad4
+1083	2818	6885888879508865	CMakeFiles/NuoServer.dir/NuoServer_autogen/mocs_compilation.cpp.obj	baa55da46c5dec5a
+1198	2848	6885888879821169	CMakeFiles/NuoServer.dir/nuoserver.cpp.obj	ffd20cdd48773ec5
+1140	3020	6885888881266331	CMakeFiles/NuoServer.dir/ekran.cpp.obj	711e730c9dce14a8
+1313	3060	6885888881884262	CMakeFiles/NuoServer.dir/main.cpp.obj	6c40217e680d65c8
+3060	3436	6885888885673163	NuoServer.exe	5007ee8b756f9d76

@@ -1,0 +1,9 @@
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/NuoServer.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/edit_cache.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/rebuild_cache.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/list_install_components.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/install.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/install/local.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/install/strip.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/NuoServer_autogen_timestamp_deps.dir
+C:/Users/User/Desktop/QTPliki/NuoProject/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile/CMakeFiles/NuoServer_autogen.dir

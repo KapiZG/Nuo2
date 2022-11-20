@@ -1,3 +1,10 @@
 /build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Debug
+/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-MinSizeRel
+/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Profile
+/build-NuoServer-Desktop_Qt_6_3_2_MinGW_64_bit-Release
 
 /build-Nuo2-Desktop_Qt_6_3_2_MinGW_64_bit-Debug
+/build-Nuo2-Desktop_Qt_6_3_2_MinGW_64_bit-MinSizeRel
+/build-Nuo2-Desktop_Qt_6_3_2_MinGW_64_bit-Release
+/build-Nuo2-Desktop_Qt_6_3_2_MinGW_64_bit-RelWithDebInfo
+

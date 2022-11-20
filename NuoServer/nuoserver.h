@@ -2,6 +2,7 @@
 #define SERVER_H
 
 #include <QTcpServer>
+#include <QSqlDatabase>
 
 class QTcpSocket;
 
@@ -16,6 +17,7 @@ public slots:
 
 private:
     class QTcpServer *mojaServer;
+    QSqlDatabase bazaDanych = QSqlDatabase::addDatabase("QMYSQL");
 };
 
 #endif // SERVER_H

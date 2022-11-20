@@ -6,6 +6,8 @@
 #include <QTcpSocket>
 #include "wyborgry.h"
 #include <QMessageBox>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 //#include <QtSql>
 
@@ -55,35 +57,72 @@ void Logowanie::zakladkaRejestracji()
 void Logowanie::rejestracja()
 {
     QString nazwa = ui->Nazwa->text();
-    QString haslo = ui->Haslo->text();
-    if(nazwa.length() > 3 && haslo.length() > 3){
-        disconnect(ui->B_Rejestracja, &QPushButton::pressed, this, &Logowanie::rejestracja);
-        ui->Blad->hide();
-        QWidget *w_pomyslnie = new QWidget();
-        QVBoxLayout *l_pomyslnie = new QVBoxLayout();
-        QPushButton *b_pomyslnie = new QPushButton("Zatwierdz");
-        l_pomyslnie->addWidget(b_pomyslnie);
-        QTextEdit *t_pomyslnie = new QTextEdit("Pomyslnie Zarejestrowano");
-        t_pomyslnie->setReadOnly(true);
-        l_pomyslnie->addWidget(t_pomyslnie);
-        w_pomyslnie->setLayout(l_pomyslnie);
-        ui->W_Rejestracja->hide();
-        this->layout()->addWidget(w_pomyslnie);
-        //W tym connectie użyte zostało wyrażenie lambda
-        connect(b_pomyslnie, &QPushButton::clicked, this, [w_pomyslnie, this]()
+    QString haslo = ui->Haslo->text(); 
+    if(nazwa.length() > 3 && haslo.length() > 3)
+    {
+        //Tworzenie wysyłanego obiektu JSON
+        QJsonObject *daneUzytkownika = new QJsonObject;
+        QJsonDocument *jsonDocument = new QJsonDocument;
+
+        daneUzytkownika->insert("Typ", "R");
+        daneUzytkownika->insert("Nazwa", nazwa);
+        daneUzytkownika->insert("Haslo", haslo);
+
+        jsonDocument->setObject(*daneUzytkownika);
+
+
+        QByteArray *jsonByte = new QByteArray(jsonDocument->toJson(QJsonDocument::Compact));
+
+        socket->write(*jsonByte);
+        socket->flush();
+
+        socket->waitForReadyRead(100);
+        if(socket->readAll() == "t")
         {
-            delete w_pomyslnie;
-            ui->Nazwa->clear();
-            ui->Haslo->clear();
-            guzikiLogowania();
-        });
-    } else if(nazwa.length() < 3 && haslo.length() > 3){
+            disconnect(ui->B_Rejestracja, &QPushButton::pressed, this, &Logowanie::rejestracja);
+            ui->Blad->hide();
+
+            //Tworzene menu po pomyślnej rejestracji
+            QWidget *w_pomyslnie = new QWidget();
+            QVBoxLayout *l_pomyslnie = new QVBoxLayout();
+            QPushButton *b_pomyslnie = new QPushButton("Zatwierdz");
+            l_pomyslnie->addWidget(b_pomyslnie);
+            QTextEdit *t_pomyslnie = new QTextEdit("Pomyslnie Zarejestrowano");
+            t_pomyslnie->setReadOnly(true);
+            l_pomyslnie->addWidget(t_pomyslnie);
+            w_pomyslnie->setLayout(l_pomyslnie);
+            ui->W_Rejestracja->hide();
+            this->layout()->addWidget(w_pomyslnie);
+
+            //Dane wysyłane do servera
+            QString daneLogowania = "Rejestracja: ";
+            daneLogowania = ui->Nazwa->text();
+            daneLogowania += " ";
+            daneLogowania +=  ui->Haslo->text();
+            socket->write(daneLogowania.toStdString().c_str());
+
+            //W tym connectie użyte zostało wyrażenie lambda
+            connect(b_pomyslnie, &QPushButton::clicked, this, [w_pomyslnie, this]()
+            {
+                delete w_pomyslnie;
+                ui->Nazwa->clear();
+                ui->Haslo->clear();
+                guzikiLogowania();
+            });
+        }
+    }
+    else if(nazwa.length() < 3 && haslo.length() > 3)
+    {
         ui->Blad->setText("Nazwa jest za krótka");
         ui->Blad->show();
-    } else if(nazwa.length() > 3 && haslo.length() < 3){
+    }
+    else if(nazwa.length() > 3 && haslo.length() < 3)
+    {
         ui->Blad->setText("Hasło jest za krótkie");
         ui->Blad->show();
-    } else {
+    }
+    else
+    {
         ui->Blad->setText("Hasło i nazwa są za krótkie");
         ui->Blad->show();
     }
@@ -131,19 +170,19 @@ void Logowanie::logowanie()
 void Logowanie::polaczZServerem()
 {
     socket->close();
-    socket->connectToHost("127.0.0.1", 6969);
+    socket->connectToHost("", 6969);
 
-    if(socket->waitForConnected(10)){
+    if(socket->waitForConnected(10000)){
 
-        socket->write("Odpowiedz od socketa");
-        socket->flush();
-        socket->waitForBytesWritten(100);
+//        socket->write("Odpowiedz od socketa");
+//        socket->flush();
+//        socket->waitForBytesWritten(100);
 
         socket->waitForReadyRead(300);
         ui->CzyJestPolaczenie->setText(socket->readAll());
 
     } else {
-        QMessageBox::critical(this, "Error", "Nie można połączyć z serverem");
+        QMessageBox::critical(this, "Error", socket->errorString());
         ui->CzyJestPolaczenie->setText("Brak złączenia z serverem");
     }
 }

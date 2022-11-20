@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Release-c985e94de5546c84e58c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Release",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Nuo2",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Nuo2::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Nuo2-Release-f3b0ea1fc8a0b7c66c22.json",
+					"name" : "Nuo2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Nuo2_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Nuo2_autogen-Release-d2f23c2a5a83a0629ba6.json",
+					"name" : "Nuo2_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Nuo2_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Nuo2_autogen_timestamp_deps-Release-d20cb77dbae28857024e.json",
+					"name" : "Nuo2_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/User/Desktop/QTPliki/NuoProject/build-Nuo2-Desktop_Qt_6_3_2_MinGW_64_bit-Release",
+		"source" : "C:/Users/User/Desktop/QTPliki/NuoProject/Nuo2"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
