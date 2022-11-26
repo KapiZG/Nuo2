@@ -13,6 +13,42 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <widget class="QPushButton" name="StworzGre">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>60</y>
+     <width>511</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Hostuj Grę</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Dolacz">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>250</y>
+     <width>521</width>
+     <height>141</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Dołącz do gry</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="DolaczID">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>410</y>
+     <width>521</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

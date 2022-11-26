@@ -7,10 +7,10 @@ class Gra : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Gra(QWidget *parent = nullptr);
+    explicit Gra(QString *id, const class Gracz *gracz, QWidget *parent = nullptr);
 
-signals:
-
+private:
+    const QString *idGry;
 };
 
 #endif // GRA_H

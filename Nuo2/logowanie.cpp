@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <QTcpSocket>
 #include "wyborgry.h"
+#include "gracz.h"
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -141,47 +142,79 @@ void Logowanie::logowanie()
 {
     QString nazwa = ui->Nazwa->text();
     QString haslo = ui->Haslo->text();
-    if(nazwa.length() > 3 && haslo.length() > 3){
-        disconnect(ui->B_Rejestracja, &QPushButton::pressed, this, &Logowanie::logowanie);
-        ui->Blad->hide();
-        QWidget *w_pomyslnie = new QWidget();
-        QVBoxLayout *l_pomyslnie = new QVBoxLayout();
-        QPushButton *b_pomyslnie = new QPushButton("Zatwierdz");
-        l_pomyslnie->addWidget(b_pomyslnie);
-        QTextEdit *t_pomyslnie = new QTextEdit("Pomyslnie Zalogowano");
-        t_pomyslnie->setReadOnly(true);
-        l_pomyslnie->addWidget(t_pomyslnie);
-        w_pomyslnie->setLayout(l_pomyslnie);
-        ui->W_Rejestracja->hide();
-        this->layout()->addWidget(w_pomyslnie);
-        //W tym connectie użyte zostało wyrażenie lambda
-        connect(b_pomyslnie, &QPushButton::clicked, this, [w_pomyslnie, this]()
+
+    QJsonObject *daneLogowania = new QJsonObject;
+    QJsonDocument *jsonDocument = new QJsonDocument;
+
+    daneLogowania->insert("Typ", "L");
+    daneLogowania->insert("Nazwa", nazwa);
+    daneLogowania->insert("Haslo", haslo);
+
+    jsonDocument->setObject(*daneLogowania);
+
+    QByteArray *jsonFile = new QByteArray(jsonDocument->toJson(QJsonDocument::Compact));
+
+    socket->write(*jsonFile);
+    socket->flush();
+
+    socket->waitForReadyRead(100);
+    QByteArray *wiadomosc = new QByteArray(socket->readAll());
+    QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(*wiadomosc));
+
+    if(!json->isEmpty())
+    {
+        QJsonObject *jsonObject = new QJsonObject(json->object());
+        if(jsonObject->value("Bool").toString() == "t")
         {
-            delete w_pomyslnie;
-            ui->Nazwa->clear();
-            ui->Haslo->clear();
-            WyborGry *wyborGry = new WyborGry();
-            wyborGry->show();
-            this->close();
-        });
+            disconnect(ui->B_Rejestracja, &QPushButton::pressed, this, &Logowanie::logowanie);
+            ui->Blad->hide();
+            QWidget *w_pomyslnie = new QWidget();
+            QVBoxLayout *l_pomyslnie = new QVBoxLayout();
+            QPushButton *b_pomyslnie = new QPushButton("Zatwierdz");
+            l_pomyslnie->addWidget(b_pomyslnie);
+            QTextEdit *t_pomyslnie = new QTextEdit("Pomyslnie Zalogowano");
+            t_pomyslnie->setReadOnly(true);
+            l_pomyslnie->addWidget(t_pomyslnie);
+            w_pomyslnie->setLayout(l_pomyslnie);
+            ui->W_Rejestracja->hide();
+            this->layout()->addWidget(w_pomyslnie);
+            //W tym connectie użyte zostało wyrażenie lambda
+            connect(b_pomyslnie, &QPushButton::clicked, this, [w_pomyslnie, this, jsonObject]()
+            {
+                delete w_pomyslnie;
+                ui->Nazwa->clear();
+                ui->Haslo->clear();
+                Gracz *gracz = new Gracz(jsonObject->value("ID").toInt());
+                WyborGry *wyborGry = new WyborGry(gracz);
+                wyborGry->show();
+                this->close();
+            });
+
+        }
+        else
+        {
+            qDebug() << "Coś poszło nie tak" << *jsonObject;
+        }
+    }
+    else
+    {
+        qDebug() << "Nie poprawny login lub haslo";
     }
 }
 
 void Logowanie::polaczZServerem()
 {
     socket->close();
-    socket->connectToHost("", 6969);
+    socket->connectToHost("89.72.109.193", 6969);
 
-    if(socket->waitForConnected(10000)){
-
-//        socket->write("Odpowiedz od socketa");
-//        socket->flush();
-//        socket->waitForBytesWritten(100);
-
+    if(socket->waitForConnected(10000))
+    {
         socket->waitForReadyRead(300);
         ui->CzyJestPolaczenie->setText(socket->readAll());
 
-    } else {
+    }
+    else
+    {
         QMessageBox::critical(this, "Error", socket->errorString());
         ui->CzyJestPolaczenie->setText("Brak złączenia z serverem");
     }

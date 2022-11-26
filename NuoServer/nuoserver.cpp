@@ -27,9 +27,6 @@ NuoServer::NuoServer(QObject *parent)
     } else {
         qDebug() << "ERROR";
     }
-
-
-
 }
 
 //Test Połączenia
@@ -51,23 +48,82 @@ void NuoServer::newConnection()
         if(!json->isEmpty())
         {
             QJsonObject *jsonObject = new QJsonObject(json->object());
-
-            qDebug() << *jsonObject;
+            //System rejestracji
             if(jsonObject->value("Typ").toString() == "R")
             {
                 QString *nazwa = new QString(jsonObject->value("Nazwa").toString());
                 QString *haslo = new QString(jsonObject->value("Haslo").toString());
 
-                QSqlQuery *insertUser = new QSqlQuery("Insert into users value (null, \"" + *nazwa + "\", \"" + *haslo + "\");");
-                if(insertUser->exec())
+                QSqlQuery *selectUser = new QSqlQuery("Select * from users where nazwa = \"" + *nazwa + "\" and haslo = \"" + *haslo + "\";");
+                selectUser->exec();
+                if(!selectUser->next())
                 {
-                    socket->write("t");
+                    QSqlQuery *insertUser = new QSqlQuery();
+                    if(insertUser->exec("Insert into users value (null, \"" + *nazwa + "\", \"" + *haslo + "\")"))
+                    {
+                        socket->write("t");
+                        socket->flush();
+                    }
+                    else
+                    {
+                        socket->write("f");
+                        socket->flush();
+                    }
+                }
+                else
+                {
+                    qDebug() << "Taki użytkownik już istnieje";
+                }
+            }
+            //System logowania
+            else if(jsonObject->value("Typ").toString() == "L")
+            {
+                QString *nazwa = new QString(jsonObject->value("Nazwa").toString());
+                QString *haslo = new QString(jsonObject->value("Haslo").toString());
+
+                QSqlQuery *selectUser = new QSqlQuery("Select * from users where nazwa = \"" + *nazwa + "\" and haslo = \"" + *haslo + "\";");
+                if(selectUser->next())
+                {
+                    QJsonDocument *jsUser = new QJsonDocument;
+                    QJsonObject *jsoUser = new QJsonObject;
+                    jsoUser->insert("ID", selectUser->value("id").toInt());
+                    jsoUser->insert("Bool", "t");
+                    jsUser->setObject(*jsoUser);
+                    QByteArray *jsonByte = new QByteArray(jsUser->toJson(QJsonDocument::Compact));
+                    socket->write(*jsonByte);
+                    socket->flush();
                 }
                 else
                 {
                     socket->write("f");
+                    socket->flush();
                 }
             }
+            //System Tworzenia gry
+            else if(jsonObject->value("Typ").toString() == "C")
+            {
+                QString *idGry = new QString(jsonObject->value("IDGry").toString());
+
+                QSqlQuery *selectIDGry = new QSqlQuery("Select * from aktywnegry where idGry = \"" + *idGry + "\";");
+                if(!selectIDGry->next())
+                {
+                    QSqlQuery *insertIDGry = new QSqlQuery();
+                    if(insertIDGry->exec("Insert into aktywnegry value (\"" + *idGry + "\", default);"))
+                    {
+                        socket->write("t");
+                        socket->flush();
+                    }
+                }
+                else
+                {
+                    socket->write("f");
+                    socket->flush();
+                }
+            }
+        }
+        else
+        {
+            qDebug() << "Nie jest to json file";
         }
     });
 

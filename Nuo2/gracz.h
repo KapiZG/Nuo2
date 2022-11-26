@@ -4,11 +4,11 @@
 
 class Gracz
 {
-    char nazwa;
-
 public:
-    Gracz();
+    Gracz(const int id);
 
+
+    const int idGracza;
 };
 
 #endif // GRACZ_H
