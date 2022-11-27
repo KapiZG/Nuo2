@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
         ekran.ui
         nuoserver.cpp
         nuoserver.h
+        gra.cpp
+        gra.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -72,3 +74,11 @@ endif()
 
 target_link_libraries(NuoServer
     PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+
+add_library(essa
+        C:/Users/User/Desktop/QTPliki/NuoProject/Nuo2/gracz.h
+        C:/Users/User/Desktop/QTPliki/NuoProject/Nuo2/gracz.cpp)
+
+target_include_directories(essa PUBLIC "C:/Users/User/Desktop/QTPliki/NuoProject/Nuo2")
+
+target_link_libraries(NuoServer PRIVATE essa)

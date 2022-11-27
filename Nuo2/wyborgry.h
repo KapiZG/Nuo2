@@ -22,6 +22,7 @@ private:
     class QTcpSocket *socket;
     const class Gracz *zalogowanyGracz;
     void tworzenieGry();
+    void dolaczDoGry();
 };
 
 #endif // WYBORGRY_H

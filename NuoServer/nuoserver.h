@@ -3,6 +3,7 @@
 
 #include <QTcpServer>
 #include <QSqlDatabase>
+#include <vector>
 
 class QTcpSocket;
 
@@ -13,11 +14,14 @@ public:
 
 public slots:
     void newConnection();
+    void newGraConnection();
     void odczytajWiadomosc();
 
 private:
     class QTcpServer *mojaServer;
+    class QTcpServer *serverGry;
     QSqlDatabase bazaDanych = QSqlDatabase::addDatabase("QMYSQL");
+    std::vector<class Gra> aktywneGry;
 };
 
 #endif // SERVER_H

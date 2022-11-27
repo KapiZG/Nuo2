@@ -9,7 +9,6 @@
 #include <QMessageBox>
 #include <QJsonDocument>
 #include <QJsonObject>
-
 //#include <QtSql>
 
 Logowanie::Logowanie(QWidget *parent)

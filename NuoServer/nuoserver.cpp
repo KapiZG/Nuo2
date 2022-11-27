@@ -7,6 +7,8 @@
 #include <QJsonArray>
 #include <QSqlDatabase>
 #include <QtSql>
+#include "gra.h"
+#include "gracz.h"
 
 NuoServer::NuoServer(QObject *parent)
     : QTcpServer(parent)
@@ -15,6 +17,9 @@ NuoServer::NuoServer(QObject *parent)
     mojaServer = new QTcpServer(this);
     connect(mojaServer, &QTcpServer::newConnection, this, &NuoServer::newConnection);
 
+    serverGry = new QTcpServer(this);
+    connect(serverGry, &QTcpServer::newConnection, this, &NuoServer::newGraConnection);
+
     //Połączenie z bazą danych
     bazaDanych.setHostName("127.0.0.130");
     bazaDanych.setUserName("root");
@@ -22,7 +27,7 @@ NuoServer::NuoServer(QObject *parent)
     bazaDanych.setDatabaseName("db_nuo");
 
     //Sprawdzenie czy wszystko działa
-    if(mojaServer->listen(QHostAddress::Any, 6969) && bazaDanych.open()){
+    if(mojaServer->listen(QHostAddress::Any, 6969) && bazaDanych.open() && serverGry->listen(QHostAddress::Any, 6970)){
         qDebug()<<"Działa byczku";
     } else {
         qDebug() << "ERROR";
@@ -40,7 +45,7 @@ void NuoServer::newConnection()
     socket->write("Połączono z Bazą");
     socket->waitForBytesWritten(200);
 
-    connect(socket, &QIODevice::readyRead, this, [socket]()
+    connect(socket, &QIODevice::readyRead, this, [socket, this]()
     {
         QByteArray *wiadomosc = new QByteArray(socket->readAll());
         QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(*wiadomosc));
@@ -104,21 +109,29 @@ void NuoServer::newConnection()
             {
                 QString *idGry = new QString(jsonObject->value("IDGry").toString());
 
+                qDebug() << *idGry;
+
                 QSqlQuery *selectIDGry = new QSqlQuery("Select * from aktywnegry where idGry = \"" + *idGry + "\";");
                 if(!selectIDGry->next())
                 {
+                    this->aktywneGry.push_back(Gra(idGry, new Gracz(jsonObject->value("IDGracza").toInt())));
                     QSqlQuery *insertIDGry = new QSqlQuery();
                     if(insertIDGry->exec("Insert into aktywnegry value (\"" + *idGry + "\", default);"))
                     {
                         socket->write("t");
                         socket->flush();
-                    }
+                   }
                 }
                 else
                 {
                     socket->write("f");
                     socket->flush();
                 }
+            }
+            //System dołączania do gry
+            else if(jsonObject->value("Typ").toString() == "J")
+            {
+
             }
         }
         else
@@ -136,7 +149,43 @@ void NuoServer::newConnection()
     });
 }
 
-void NuoServer::odczytajWiadomosc()
+void NuoServer::newGraConnection()
 {
+    QTcpSocket *socket = serverGry->nextPendingConnection();
 
+    qDebug() << "polaczo z gra";
+
+    connect(socket, &QIODevice::readyRead, this, [socket, this]()
+    {
+        Gra *aktywnaGra;
+        QByteArray *wiadomosc = new QByteArray(socket->readAll());
+        QJsonDocument *json = new QJsonDocument(QJsonDocument::fromJson(*wiadomosc));
+        if(!json->isEmpty())
+        {
+            QJsonObject *jsonObject = new QJsonObject(json->object());
+            if(jsonObject->value("IDGRY") != QJsonValue::Undefined)
+            {
+                QString *idGry = new QString(jsonObject->value("IDGRY").toString());
+                for(int i = 0; i < this->aktywneGry.size(); i++)
+                {
+                    if(this->aktywneGry.at(i).IDGry == *idGry)
+                    {
+                        aktywnaGra = new Gra(this->aktywneGry.at(i));
+                        break;
+                    }
+                }
+                //Tytaj do if daję wydarzenia jakie będą wykonywane w grze
+
+            }
+            else
+            {
+                qDebug() << "Zly format wiadomosci";
+            }
+        }
+        else
+        {
+            qDebug() << "to nie jest json";
+        }
+
+    });
 }

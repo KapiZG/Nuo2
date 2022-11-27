@@ -5,3 +5,8 @@ Gracz::Gracz(const int id)
 {
 
 }
+
+int Gracz::getIDGracza() const
+{
+    return idGracza;
+}

@@ -21,7 +21,6 @@ set(PROJECT_SOURCES
         logowanie.cpp
         logowanie.h
         logowanie.ui
-        karta.cpp
         karta.h
         knumer.cpp
         knumer.h
@@ -33,11 +32,12 @@ set(PROJECT_SOURCES
         bot.h
         czlowiek.cpp
         czlowiek.h
-        gra.cpp
-        gra.h
         wyborgry.cpp
         wyborgry.h
         wyborgry.ui
+        widokgry.cpp
+        widokgry.h
+        widokgry.ui
         ${TS_FILES}
 )
 

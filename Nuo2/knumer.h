@@ -1,8 +1,9 @@
 #ifndef KNUMER_H
 #define KNUMER_H
 
+#include "karta.h"
 
-class KNumer
+class KNumer : public Karta
 {
 public:
     KNumer();

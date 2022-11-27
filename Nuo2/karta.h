@@ -8,15 +8,9 @@
 
 class Karta : public QLabel
 {
-    Q_OBJECT
-    int numer;
-    char kolor;
-public:
-    Karta();
-
-signals:
-
-
+protected:
+    QString grafikaKarty;
+    QString idKarty;
 };
 
 #endif // KARTA_H

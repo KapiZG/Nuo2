@@ -6,8 +6,9 @@ class Gracz
 {
 public:
     Gracz(const int id);
+    int getIDGracza() const;
 
-
+private:
     const int idGracza;
 };
 
